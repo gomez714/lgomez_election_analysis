@@ -14,13 +14,13 @@ winning_candidate = ""
 winning_count = 0
 winning_percentage = 0
 
+
 with open(file_to_load) as election_data:
 
     file_reader = csv.reader(election_data)
     
-    # Print the header row.
+    # Read the header row.
     headers = next(file_reader)
-    print(headers)
 
     # Print each row in the CSV file.
     for row in file_reader:
@@ -38,13 +38,31 @@ with open(file_to_load) as election_data:
         #Add a vote to that candidate's count.
         candidate_votes[candidate_name] += 1
 
+
+with open(file_to_save, "w") as txt_file:
+
+    election_results = (
+        f"\nElection Results\n"
+        f"-------------------------\n"
+        f"Total Votes: {total_votes:,}\n"
+        f"-------------------------\n")
+    print(election_results, end="")
+
+    txt_file.write(election_results)
+
     # Total votes per candidate and vote percentage
     for candidate in candidate_votes:
 
+
+        
         votes = candidate_votes[candidate]
         vote_percentage = int(votes) / int(total_votes) * 100
+        candidate_results = (f"{candidate}: {vote_percentage:.1f}% ({votes:,})\n")
 
-        print(f"{candidate}: {vote_percentage:.1f}% ({votes:,})\n")
+        print(candidate_results)
+
+        txt_file.write(candidate_results)
+
 
         #  Winner of election
         if (votes > winning_count) and (vote_percentage > winning_percentage):
@@ -54,13 +72,14 @@ with open(file_to_load) as election_data:
             winning_candidate = candidate  
     
     winning_candidate_summary = (
-    f"-------------------------\n"
-    f"Winner: {winning_candidate}\n"
-    f"Winning Vote Count: {winning_count:,}\n"
-    f"Winning Percentage: {winning_percentage:.1f}%\n"
-    f"-------------------------\n")
+        f"-------------------------\n"
+        f"Winner: {winning_candidate}\n"
+        f"Winning Vote Count: {winning_count:,}\n"
+        f"Winning Percentage: {winning_percentage:.1f}%\n"
+        f"-------------------------\n")
     
-print(winning_candidate_summary)
+    print(winning_candidate_summary)
+    txt_file.write(winning_candidate_summary)
 
 
 
